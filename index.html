@@ -1,0 +1,79 @@
+<html>
+<head>
+<style>
+label,input {
+  font-size: 24px;
+  display:inline-block;
+}
+button {
+display:inline-block;
+text-align: center;
+
+}
+.twitch {
+    padding: 10px;
+    background-color: #6441a4;
+    color: white;
+    border-radius: 5px;
+    border-width: 0px;
+    font-size: 200%;
+}
+#amtId{
+  max-width: 150px;
+  width: -webkit-fill-available
+}
+
+</style>
+</head>
+
+<body style="padding:30px">
+  <h1> Payment Setup </h2>
+  <label for="amtId" id="amtTxt"></label>&nbsp;&nbsp;<input type="number" id="amtId" required /></br></br>
+  <label for="descId">Description: </label>&nbsp;&nbsp;<input type="text" id="descId" /></br></br>
+
+  </br></br>
+  <div style="text-align:center; font-size:140%">
+  <button class="twitch" type="button" onclick="makeInvoice();">Make Invoice</button>
+  </div>
+
+  <script defer>
+    // Enter OpenNode INVOICE API key (first one) and preferred Fiat Currency
+    // https://app.opennode.com/developers/integrations
+    const apiKey = 'de70f027-ea5a-466a-a1cd-be4e6314946f';
+    const currency = 'EUR';
+
+    // put currency in the text description
+    document.getElementById("amtTxt").innerHTML = "Invoice Amount (" + currency + "):"
+
+    function makeInvoice() {
+      const data = JSON.stringify({
+        currency: currency,
+        auto_settle: true,
+        amount: document.getElementById("amtId").value,
+        description: document.getElementById("descId").value
+      });
+
+      const xhr = new XMLHttpRequest();
+      xhr.withCredentials = false;
+
+      xhr.addEventListener('readystatechange', function () {
+        if (this.readyState == 4 && this.status != 200) {
+          alert(this.responseText);
+        } else if (this.readyState === this.DONE) {
+          console.log(this.responseText);
+          const res = JSON.parse(this.responseText);
+          window.open(res.data.hosted_checkout_url, '_blank');
+        }
+      });
+
+      xhr.open('POST', 'https://api.opennode.com/v1/charges');
+      xhr.setRequestHeader('accept', 'application/json');
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.setRequestHeader('Authorization', apiKey);
+      xhr.send(data);
+
+    }
+  </script>
+</body>
+
+</html>
