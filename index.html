@@ -20,7 +20,7 @@ label {
 }
 
 /* Style the submit button */
-input[type=submit] {
+#submitBtn {
   background-color: #04AA6D;
   color: white;
   padding: 12px 20px;
@@ -73,7 +73,7 @@ input[type=submit] {
 <body style="padding:30px">
   <h1> Payment Setup </h2>
     <div class="container">
-    <form >
+
         <div class="row">
         <div class="col-25">
             <label for="amtId" id="amtTxt"></label>
@@ -92,9 +92,9 @@ input[type=submit] {
         </div>
         <div class="row">
             <br/>
-        <input value="Make Invoice" onclick="makeInvoice();">
+        <button onclick="makeInvoice();" id='submitBtn'> Make Invoice</button>
         </div>
-    </form>
+
     </div>
   </br></br>
 
